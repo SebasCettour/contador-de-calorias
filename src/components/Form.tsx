@@ -1,12 +1,22 @@
+import { useState, ChangeEvent, FormEvent, Dispatch } from "react";
+import {v4 as uuidv4} from "uuid";
 import { categories } from "../data/categories";
-import { useState, ChangeEvent, FormEvent } from "react";
 import { Activity } from "../data/types";
-export default function Form() {
-  const [activity, setActivity] = useState<Activity>({
-    category: 1,
-    name: "",
-    calories: 0,
-  });
+import { ActivityActions } from "../reducers/activity-reducer";
+
+type FormProps = {
+  dispatch: Dispatch<ActivityActions>;
+};
+
+const initialState: Activity = {
+  id: uuidv4(),
+  category: 1,
+  name: "",
+  calories: 0,
+};
+
+export default function Form({ dispatch }: FormProps) {
+  const [activity, setActivity] = useState<Activity>(initialState);
 
   const handleChange = (
     e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
@@ -19,23 +29,32 @@ export default function Form() {
     });
   };
 
-  const isValidActivity=()=>{
-    const {name, calories}=activity;
-    return name.trim()!=='' && calories>0;
-  }
+  const isValidActivity = () => {
+    const { name, calories } = activity;
+    return name.trim() !== "" && calories > 0;
+  };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => { 
-    e.preventDefault()
-    console.log('done')
-  }
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+   dispatch({ type: "save-activity", payload: { newActivity: activity } });
+
+    setActivity({
+      ...initialState,
+      id: uuidv4(),
+      category: activity.category,
+    });
+  };
 
   //Formulario
 
   /* Categoria */
 
   return (
-    <form className="space-y-5 bg-white shadow p-10 rounded-lg"
-    onSubmit={handleSubmit}>
+    <form
+      className="space-y-5 bg-white shadow p-10 rounded-lg"
+      onSubmit={handleSubmit}
+    >
       <div className="grid grid-cols-1 gap-3">
         <label htmlFor="category" className="font-bold">
           Categoría
@@ -110,7 +129,9 @@ export default function Form() {
         text-center
         cursor-pointer
         disabled:opacity-10"
-          value={activity.category === 1 ? 'Guardar comida' : 'Guardar actividad'}
+          value={
+            activity.category === 1 ? "Guardar comida" : "Guardar actividad"
+          }
           disabled={!isValidActivity()}
         />
       </div>
