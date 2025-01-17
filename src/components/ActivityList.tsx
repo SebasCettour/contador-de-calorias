@@ -36,7 +36,7 @@ export default function ActivityList({
             className="p-5 py-10 bg-white mt-5 flex justify-between shadow"
           >
             <div className="space-y-2 relative">
-              {/* Clase dinámica para el color */}
+             
               <p
                 className={`absolute -top-8 -left-5 px-10 py-2 uppercase text-white font-semibold ${
                   activity.category === 1 ? "bg-lime-500" : "bg-orange-500"

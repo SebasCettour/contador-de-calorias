@@ -2,6 +2,7 @@ import { useReducer, useEffect } from "react";
 import Form from "./components/Form";
 import { activityReducer, initialState } from "./reducers/activity-reducer";
 import ActivityList from "../src/components/ActivityList";
+import CaloriesTracker from "./components/CaloriesTracker";
 
 function App() {
   const [state, dispatch] = useReducer(activityReducer, initialState);
@@ -10,13 +11,12 @@ function App() {
     localStorage.setItem("activities", JSON.stringify(state.activities));
   }, [state.activities]);
 
-  // Simplificado, ya no es necesario useMemo
   const canRestartApp = state.activities.length > 0;
 
   return (
     <>
       <header className="bg-lime-600 py-3">
-        <div className="max-w-4xl mx-auto flex justify-between">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
           <h1 className="text-center text-lg uppercase text-white font-bold">
             Contador de calorías
           </h1>
@@ -46,6 +46,12 @@ function App() {
 
       <section className="p-10 mx-auto max-w-4xl">
         <ActivityList activities={state.activities} dispatch={dispatch} />
+      </section>
+
+      <section className="bg-gray-800 py-10 rounded-lg">
+        <div className="max-w4xl mx-auto">
+          <CaloriesTracker activities={state.activities} />
+        </div>
       </section>
     </>
   );
