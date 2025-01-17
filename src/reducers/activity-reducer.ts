@@ -1,16 +1,19 @@
 import { Activity } from "../data/types";
 
 export type ActivityActions = 
-{type: 'save-activity', payload: {newActivity: Activity}};
+{type: 'save-activity', payload: {newActivity: Activity}} |
+{type: 'set-activeId', payload: {id: Activity['id']}}
 
 
-type ActivityState = {
-    activities: Activity[];
+export type ActivityState = {
+    activities: Activity[],
+    activeId: Activity['id']
 
 }
 
 export const initialState: ActivityState = {
     activities: [],
+    activeId: ''
 };
 
 
@@ -27,6 +30,14 @@ if(action.type==='save-activity'){
     }
 
     }
+
+    if(action.type === 'set-activeId')
+        return {
+            ...state,
+            activeId: action.payload.id
+
+    
+        }
 
     return state;
 
