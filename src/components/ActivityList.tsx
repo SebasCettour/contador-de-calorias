@@ -33,7 +33,7 @@ export default function ActivityList({
         activities.map((activity) => (
           <div
             key={activity.id}
-            className="p-5 py-10 bg-white mt-5 flex justify-between"
+            className="p-5 py-10 bg-white mt-5 flex justify-between shadow"
           >
             <div className="space-y-2 relative">
               {/* Clase dinámica para el color */}

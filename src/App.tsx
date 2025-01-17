@@ -1,15 +1,17 @@
 import { useReducer, useEffect } from "react";
 import Form from "./components/Form";
 import { activityReducer, initialState } from "./reducers/activity-reducer";
-import ActivityList from "../src/components/ActivityList"
+import ActivityList from "../src/components/ActivityList";
 
 function App() {
   const [state, dispatch] = useReducer(activityReducer, initialState);
 
-  useEffect(()=> {
-    localStorage.setItem('activities', JSON.stringify(state.activities))
+  useEffect(() => {
+    localStorage.setItem("activities", JSON.stringify(state.activities));
+  }, [state.activities]);
 
-  }, [state.activities])
+  // Simplificado, ya no es necesario useMemo
+  const canRestartApp = state.activities.length > 0;
 
   return (
     <>
@@ -18,22 +20,32 @@ function App() {
           <h1 className="text-center text-lg uppercase text-white font-bold">
             Contador de calorías
           </h1>
+
+          <button
+            className="bg-gray-600 
+          hover:bg-gray-900
+          p-2 font-semibold 
+          uppercase
+          text-white 
+          cursor-pointer 
+          rounded-lg 
+          text-sm"
+            disabled={!canRestartApp}
+            onClick={() => dispatch({ type: "restart-app" })}
+          >
+            Reiniciar App
+          </button>
         </div>
       </header>
 
       <section className="bg-lime-500 py-20 px-5">
         <div className="max-w-4xl mx-auto">
-          <Form dispatch={dispatch} 
-          state={state}
-          />
+          <Form dispatch={dispatch} state={state} />
         </div>
       </section>
 
       <section className="p-10 mx-auto max-w-4xl">
-        <ActivityList
-        activities={state.activities}
-        dispatch={dispatch}
-        />
+        <ActivityList activities={state.activities} dispatch={dispatch} />
       </section>
     </>
   );
